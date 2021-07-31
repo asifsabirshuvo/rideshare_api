@@ -17,6 +17,8 @@ const vehicleSchema = new Schema({
     },
     vehicleType: {
         type: String,
+        enum: ['Activa', 'Polo', 'XUV'],
+        default: 'Activa',
         required: true
     },
     name: {
