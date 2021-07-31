@@ -1,15 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const { createVehicleValidator } = require('./../validators/createVehicleValidator');
 const vehicleService = require('./../service/vehicleService');
 const { check, validationResult } = require("express-validator"); //to validate form
 
-router.post("/", [check("name").not().isEmpty(),
-        check("description").not().isEmpty(),
-        check("defaultSeats").not().isEmpty(),
-        check("vehicleType").not().isEmpty(),
-        check("userPhone").not().isEmpty(),
-    ],
+router.post("/", createVehicleValidator,
     async(req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

@@ -133,7 +133,6 @@ async function findRides(reqFilters) {
         };
     }
 }
-
 async function requestRide(request) {
     //SKIPPED IF THE USER IS ALREADY IN THIS RIDE
     const { userPhone, rideCode, seatQuantity } = request;
@@ -183,11 +182,23 @@ async function endRide(request) {
         };
     }
 }
+async function rideStats() {
 
+    //SORRY COULDNT DO DUE TO TIME CONSTRAINTS
+
+
+
+    // Ride.findOne({ _id: req.params.id })
+    //     .populate({
+    //         path: "dddriver",
+    //         model: "user",
+    //     })
+}
 
 module.exports = {
     createRide,
     findRides,
     requestRide,
-    endRide
+    endRide,
+    rideStats
 };

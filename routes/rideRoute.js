@@ -2,14 +2,16 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const rideService = require('./../service/rideService');
+
+const { createRideValidator } = require('./../validators/createRideValidator');
+const { findRideValidator } = require('./../validators/findRideValidator');
+const { requestRideValidator } = require('./../validators/requestRideValidator');
+const { endRideValidator } = require('./../validators/endRideValidator');
+
 const { check, validationResult } = require("express-validator"); //to validate form
 const { query, queryValidationResult } = require("express-validator"); //to validate form
 
-router.post("/", [check("origin").not().isEmpty(),
-        check("destination").not().isEmpty(),
-        check("userPhone").not().isEmpty(),
-        check("vehicleCode").notEmpty().isString(),
-    ],
+router.post("/", createRideValidator,
     async(req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -27,11 +29,7 @@ router.post("/", [check("origin").not().isEmpty(),
     }
 );
 
-router.get("/", [check("origin").not().isEmpty(),
-    query("origin").not().isEmpty(),
-    query("destination").not().isEmpty(),
-    query("userPhone").notEmpty().isString(),
-], async(req, res) => {
+router.get("/", findRideValidator, async(req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -65,10 +63,8 @@ router.get("/", [check("origin").not().isEmpty(),
 
 });
 
-router.post("/request-ride", [check("rideCode").not().isEmpty(),
-        check("userPhone").not().isEmpty(),
-        check("seatQuantity").not().isEmpty(),
-    ],
+
+router.post("/request-ride", requestRideValidator,
     async(req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -92,11 +88,7 @@ router.post("/request-ride", [check("rideCode").not().isEmpty(),
     }
 );
 
-
-router.post("/end-ride", [check("rideCode").not().isEmpty(),
-        check("userPhone").not().isEmpty(),
-        check("rideCode").not().isEmpty(),
-    ],
+router.post("/end-ride", endRideValidator,
     async(req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -113,4 +105,13 @@ router.post("/end-ride", [check("rideCode").not().isEmpty(),
         }
     }
 );
+
+router.get("/ride-stats", async(req, res) => {
+    const data = await rideService.rideStats();
+    return res.status(data.status).json({
+        success: data.success,
+        message: data.message
+    });
+
+});
 module.exports = router;
