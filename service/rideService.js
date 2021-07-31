@@ -73,5 +73,47 @@ async function createRide(body) {
         };
     }
 }
+async function findRides(reqFilters) {
+    console.log(reqFilters);
 
-module.exports = { createRide };
+    const {
+        origin,
+        destination,
+        userPhone,
+        preferredVehicle,
+        mostVacant,
+        page,
+        limit
+    } = reqFilters;
+
+    let query = {};
+    query.skip = limit * (page - 1);
+    query.limit = limit;
+    let whereQuery = {
+        origin: origin,
+        destination: destination,
+        rideStatus: 1,
+    };
+    if (preferredVehicle) {
+        whereQuery.vehicleType = preferredVehicle;
+    }
+
+    try {
+        const data = await Ride.find(whereQuery, { _id: 0, __v: 0 }, query);
+        console.log(data);
+        return {
+            status: 200,
+            success: true,
+            message: data,
+        };
+    } catch (err) {
+        return {
+            status: 400,
+            success: false,
+            message: 'failed to find from the database',
+        };
+    }
+}
+
+
+module.exports = { createRide, findRides };
