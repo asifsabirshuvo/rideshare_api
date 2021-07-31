@@ -23,6 +23,10 @@ const rideSchema = new Schema({
         ref: 'user',
         required: true
     },
+    travellers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+    }],
     availableSeats: {
         type: Number,
         required: true

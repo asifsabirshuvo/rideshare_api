@@ -86,6 +86,13 @@ async function findRides(reqFilters) {
         limit
     } = reqFilters;
 
+    /*
+    DUE TO TIME CONSTRAINTS
+    we are skipping wherether this is user 
+    is valid or invalid
+    or currently sitting in a ride
+    */
+
     let query = {};
     query.skip = limit * (page - 1);
     query.limit = limit;
@@ -118,5 +125,40 @@ async function findRides(reqFilters) {
     }
 }
 
+async function requestRide(request) {
+    //SKIPPED IF THE USER IS ALREADY IN THIS RIDE
+    const { userPhone, rideCode, seatQuantity } = request;
+    const traveller = await User.findOne({ phone: userPhone });
+    const ride = await Ride.findOne({ rideCode: rideCode });
+    const currentSeats = ride.availableSeats;
+    if (currentSeats < parseInt(seatQuantity)) {
+        return {
+            status: 404,
+            success: false,
+            message: 'Seats unavailable.',
+        };
+    }
+    await Ride.updateOne({ rideCode: rideCode }, {
+        $push: {
+            travellers: traveller.id,
+        },
+        availableSeats: currentSeats - 1
+    });
+    return {
+        status: 201,
+        success: true,
+        message: 'Successfully enrolled to ride.',
+    };
 
-module.exports = { createRide, findRides };
+}
+async function endRide() {
+
+}
+
+
+module.exports = {
+    createRide,
+    findRides,
+    requestRide,
+    endRide
+};

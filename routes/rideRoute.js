@@ -65,4 +65,30 @@ router.get("/", [check("origin").not().isEmpty(),
 
 });
 
+router.post("/request-ride", [check("rideCode").not().isEmpty(),
+        check("userPhone").not().isEmpty(),
+        check("seatQuantity").not().isEmpty(),
+    ],
+    async(req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: errors.array(),
+            });
+        } else {
+            if (parseInt(req.body.seatQuantity) > 2) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'maximum 2 seats requests are allowed'
+                });
+            }
+            const data = await rideService.requestRide(req.body);
+            return res.status(data.status).json({
+                success: data.success,
+                message: data.message
+            });
+        }
+    }
+);
 module.exports = router;
