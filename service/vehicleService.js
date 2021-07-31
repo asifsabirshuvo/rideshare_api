@@ -17,9 +17,7 @@ async function createVehicle(body) {
 
     body.createdAt = momentTz().tz("Asia/Dhaka").format('YYYY-MM-DD HH:mm:ss');
     body.updatedAt = momentTz().tz("Asia/Dhaka").format('YYYY-MM-DD HH:mm:ss');
-    console.log('finding user');
     const user = await User.findOne({ phone: body.userPhone });
-    console.log(user);
     if (user == null) {
         return {
             status: 404,
@@ -53,7 +51,6 @@ async function createVehicle(body) {
             message: 'successfully added vehicle!',
         };
     } catch (err) {
-        console.log(err);
         return {
             status: 400,
             success: false,

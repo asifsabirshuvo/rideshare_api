@@ -9,11 +9,7 @@ async function createRide(body) {
     body.createdAt = momentTz().tz("Asia/Dhaka").format('YYYY-MM-DD HH:mm:ss');
     body.updatedAt = momentTz().tz("Asia/Dhaka").format('YYYY-MM-DD HH:mm:ss');
     //check for existing
-    console.log('---camere herere');
-
-    console.log();
     const existingUser = await User.findOne({ phone: body.userPhone });
-    console.log(existingUser);
 
     if (existingUser == null) {
         return {
@@ -29,7 +25,6 @@ async function createRide(body) {
         ownerId: Object(existingUser.id),
         vehicleCode: body.vehicleCode,
     });
-    console.log(existingVehicle);
 
     //does this vehicle have running ride already
     const activeRide = await Ride.findOne({ driver: existingUser.id, rideStatus: 1, vehicleCode: body.vehicleCode });
@@ -61,8 +56,6 @@ async function createRide(body) {
         vehicleType: existingVehicle.vehicleType
     };
 
-    console.log('-----------new ride data');
-    console.log(newRide);
 
     const ride = new Ride(newRide);
 
@@ -83,7 +76,7 @@ async function createRide(body) {
     }
 }
 async function findRides(reqFilters) {
-    console.log(reqFilters);
+
 
     const {
         origin,
@@ -119,7 +112,7 @@ async function findRides(reqFilters) {
 
     try {
         const data = await Ride.find(whereQuery, { _id: 0, __v: 0 }, query);
-        console.log(data);
+
         return {
             status: 200,
             success: true,
@@ -160,11 +153,9 @@ async function requestRide(request) {
 
 }
 async function endRide(request) {
-    console.log('ending ride');
+
     const { rideCode, userPhone } = request;
-    console.log(rideCode, userPhone);
     const user = await User.findOne({ phone: parseInt(userPhone) });
-    console.log(user);
     const endedRide = await Ride.updateOne({ rideCode: rideCode, driver: user.id }, {
         rideStatus: 0
     });
