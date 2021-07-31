@@ -31,13 +31,22 @@ async function createRide(body) {
     });
     console.log(existingVehicle);
 
-    //does this have running ride already
+    //does this vehicle have running ride already
     const activeRide = await Ride.findOne({ driver: existingUser.id, rideStatus: 1, vehicleCode: body.vehicleCode });
     if (activeRide) {
         return {
             status: 400,
             success: false,
             message: 'You already have an active ride for this vehicle',
+        };
+    }
+    //Users can only offer a ride for a given vehicle, once there are no active offered rides for that 
+    const routeAvailability = await Ride.findOne({ rideStatus: 1, origin: body.origin, destination: body.destination });
+    if (routeAvailability) {
+        return {
+            status: 400,
+            success: false,
+            message: 'This origin destination have already active ride offers.',
         };
     }
 
