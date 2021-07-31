@@ -18,7 +18,7 @@ app.get('/api/v1/health', (req, res) => {
 
 app.use('/api/v1/user/', userRoute);
 app.use('/api/v1/vehicle/', vehicleRoute);
-// app.use('/api/v1/ride/', rideRoute);
+app.use('/api/v1/ride/', rideRoute);
 
 //default error routers
 app.use((req, res) => {

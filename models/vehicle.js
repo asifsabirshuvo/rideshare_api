@@ -11,12 +11,24 @@ const vehicleSchema = new Schema({
         ref: 'user',
         required: true
     },
+    vehicleCode: {
+        type: String,
+        required: true
+    },
+    vehicleType: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
     },
     description: {
         type: String,
+        required: true
+    },
+    defaultSeats: {
+        type: Number,
         required: true
     },
     createdAt: {

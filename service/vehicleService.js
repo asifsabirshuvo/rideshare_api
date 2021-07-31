@@ -1,6 +1,7 @@
 const momentTz = require("moment-timezone");
 const Vehicle = require("../models/vehicle");
 const User = require("../models/user");
+const uniqid = require('uniqid');
 
 async function createVehicle(body) {
 
@@ -34,6 +35,7 @@ async function createVehicle(body) {
         };
     }
     body.ownerId = user.id;
+    body.vehicleCode = uniqid();
     const vehicle = new Vehicle(body);
     try {
         await vehicle.save();

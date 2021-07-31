@@ -6,6 +6,8 @@ const { check, validationResult } = require("express-validator"); //to validate 
 
 router.post("/", [check("name").not().isEmpty(),
         check("description").not().isEmpty(),
+        check("defaultSeats").not().isEmpty(),
+        check("vehicleType").not().isEmpty(),
         check("userPhone").not().isEmpty(),
     ],
     async(req, res) => {

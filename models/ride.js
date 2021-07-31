@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const auditSchema = new Schema({
+const rideSchema = new Schema({
     _id: {
         type: Schema.ObjectId,
         auto: true
@@ -31,6 +31,10 @@ const auditSchema = new Schema({
         type: Number,
         required: true
     },
+    vehicleCode: {
+        type: String,
+        required: true
+    },
     vehicleType: {
         type: String,
         required: true
@@ -46,4 +50,4 @@ const auditSchema = new Schema({
 
 });
 
-module.exports = mongoose.model("Audit", auditSchema);
+module.exports = mongoose.model("Ride", rideSchema);
