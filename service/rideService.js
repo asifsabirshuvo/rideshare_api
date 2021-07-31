@@ -97,6 +97,9 @@ async function findRides(reqFilters) {
     if (preferredVehicle) {
         whereQuery.vehicleType = preferredVehicle;
     }
+    if (mostVacant) {
+        query.sort = { "availableSeats": -1 };
+    }
 
     try {
         const data = await Ride.find(whereQuery, { _id: 0, __v: 0 }, query);
