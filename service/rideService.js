@@ -160,8 +160,28 @@ async function requestRide(request) {
     };
 
 }
-async function endRide() {
-
+async function endRide(request) {
+    console.log('ending ride');
+    const { rideCode, userPhone } = request;
+    console.log(rideCode, userPhone);
+    const user = await User.findOne({ phone: parseInt(userPhone) });
+    console.log(user);
+    const endedRide = await Ride.updateOne({ rideCode: rideCode, driver: user.id }, {
+        rideStatus: 0
+    });
+    if (endedRide.nModified) {
+        return {
+            status: 200,
+            success: true,
+            message: 'Successfully ended the ride.',
+        };
+    } else {
+        return {
+            status: 400,
+            success: true,
+            message: 'Failed to end the ride.',
+        };
+    }
 }
 
 
